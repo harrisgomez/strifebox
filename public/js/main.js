@@ -1,11 +1,14 @@
 const chatForm = document.getElementById('chat-form');
 const socket = io(); // Made available via script tag added in chat.html
+const chatMessages = document.querySelector('.chat-messages');
 
 // Message from server
 socket.on('message', message => {
     console.log(message);
-
     outputMessage(message);
+
+    // Auto scroll down to new messages
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
 // Message submit
@@ -17,6 +20,10 @@ chatForm.addEventListener('submit', e => {
 
     // Emit message to server
     socket.emit('chatMessage', msg);
+
+    // Clear input
+    e.target.elements.msg.value = '';
+    e.target.elements.msg.focus();
 });
 
 // Output message to DOM
